@@ -3,7 +3,4 @@ export * from './excel-util';
 export * from './file-util';
 export * from './http-util';
 export * from './logs-util';
-export * from './dhis2-organisation-unit-util';
 export * from './dhis2-tracked-entity-instance-util';
-export * from './duplication-manipulation-util';
-export * from './dhis2-program-util';
