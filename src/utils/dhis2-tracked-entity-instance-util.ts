@@ -10,12 +10,13 @@ export class Dhis2TrackedEntityInstanceUtil {
     'Content-Type': string;
   };
   private _baseUrl: string;
-  private pageSize = 1000;
+  private pageSize = 500;
 
   constructor(username: string, password: string, baseUrl: string) {
     this._headers = AppUtil.getHttpAuthorizationHeader(username, password);
     this._baseUrl = baseUrl;
   }
+  ///TODO const url = `${serverUrl}/api/trackedEntityInstances?strategy=CREATE_AND_UPDATE`;
 
   async discoverTrackedEntityInstances(
     program: string,
@@ -27,8 +28,7 @@ export class Dhis2TrackedEntityInstanceUtil {
         ? `ou=${organisationUniIds.join(';')}&ouMode=DESCENDANTS`
         : `ouMode=ACCESSIBLE`;
     const apiUrl = `${this._baseUrl}/api/trackedEntityInstances.json?program=${program}&${ouFilter}`;
-    //TODO update filters
-    const fields = `trackedEntityInstance,orgUnit,created,attributes[attribute,value],enrollments[events[event,progrogramStage,eventDate]]`;
+    const fields = `trackedEntityInstance,orgUnit,attributes[attribute,value],enrollments[program,events[event,progrogramStage,eventDate,dataValues[value,dataElement]]]`;
     await new LogsUtil().addLogs(
       'info',
       `Discovering pagination details for TEIs`,
