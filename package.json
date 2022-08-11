@@ -1,0 +1,41 @@
+{
+  "name": "kb-beneficiary-status-update",
+  "version": "1.0.0",
+  "description": "Automatic script for update beneficiary status",
+  "main": "index.ts",
+  "scripts": {
+    "build-app": "tsc",
+    "format": "prettier --config .prettierrc --write   \"*/*.ts\" \"*/*/*.ts\"  \"*.json\"",
+    "start": "ts-node ./src/index.ts",
+    "dev": "ts-node-dev --respawn ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hisptz/-kb-beneficiary-status-update.git"
+  },
+  "keywords": [
+    "script"
+  ],
+  "author": "Joseph Chingalo",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/hisptz/-kb-beneficiary-status-update/issues"
+  },
+  "homepage": "https://github.com/hisptz/-kb-beneficiary-status-update#readme",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "prettier": "^2.7.1",
+    "request": "^2.88.2",
+    "shelljs": "^0.8.5",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.182",
+    "@types/request": "^2.48.8",
+    "@types/shelljs": "^0.8.11",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0"
+  }
+}
