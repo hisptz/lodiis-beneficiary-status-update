@@ -1,0 +1,5 @@
+.DS_Store
+dist
+resources
+node_modules
+src/configs/app-config.ts
