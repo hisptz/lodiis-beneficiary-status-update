@@ -13,6 +13,7 @@ async function startAppProcess() {
       'App'
     );
     const appProcess = new AppProcess();
+    await appProcess.startProcess();
     await new LogsUtil().addLogs(
       'info',
       'End of KB beneficiary status updates',
