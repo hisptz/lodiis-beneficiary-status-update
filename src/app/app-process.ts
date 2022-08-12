@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { BeneficiaryData } from '.';
 import { appConfig } from '../configs';
 import {
   BENEFICIARY_STATUS_ID,
@@ -36,15 +37,44 @@ export class AppProcess {
   async startProcess() {
     try {
       for (const progrmConfig of BENEFICIARY_STATUS_PROGRAM) {
-        const attributeIds: any = [];
-        await this._dhis2ProgramUtil.discoverProgramMandatoryAttributes(
-          progrmConfig.id
-        );
-        const teis = await this._getBeneficiaryTeiData(
-          attributeIds,
-          progrmConfig
-        );
-        console.log(JSON.stringify(teis));
+        const mandatoryAttributeIds: any =
+          await this._dhis2ProgramUtil.discoverProgramMandatoryAttributes(
+            progrmConfig.id
+          );
+        const { programId, attributeIds, dataElementIds, programStageIds } =
+          this._getBeneficiaryMetadataConfig(
+            mandatoryAttributeIds,
+            progrmConfig
+          );
+
+        const pagefilters =
+          await this._dhis2TrackedEntityInstanceUtil.discoverTrackedEntityInstancesPageFilters(
+            progrmConfig.id
+          );
+        let count = 0;
+        for (const pagefilter of pagefilters) {
+          count++;
+          await new LogsUtil().addLogs(
+            'info',
+            `Discovering TEIs : ${programId} ::: ${count}/${pagefilters.length} `,
+            'startProcess'
+          );
+          const teis =
+            await this._dhis2TrackedEntityInstanceUtil.discoverTrackedEntityInstancesByPagination(
+              programId,
+              attributeIds,
+              programStageIds,
+              dataElementIds,
+              pagefilter
+            );
+          for (const tei of teis) {
+            const beneficiry: BeneficiaryData = new BeneficiaryData(tei);
+            //console.log(beneficiry.toDhis2());
+            console.log(beneficiry.previousBeneficiaryStatus);
+            console.log(beneficiry.beneficiaryStatus);
+            console.log(beneficiry.shouldSync);
+          }
+        }
       }
     } catch (error: any) {
       await new LogsUtil().addLogs(
@@ -55,10 +85,10 @@ export class AppProcess {
     }
   }
 
-  async _getBeneficiaryTeiData(
+  _getBeneficiaryMetadataConfig(
     attributeIds: any[],
     progrmConfig: BeneficiaryStatusConfigModel
-  ): Promise<Dhis2TrackedEntityInstance[]> {
+  ) {
     attributeIds.push(BENEFICIARY_STATUS_ID);
     const dataElementIds = _.flattenDeep(
       _.concat(
@@ -78,13 +108,11 @@ export class AppProcess {
         progrmConfig?.referralServices?.programStages
       )
     );
-    const teis =
-      await this._dhis2TrackedEntityInstanceUtil.discoverTrackedEntityInstances(
-        progrmConfig.id,
-        attributeIds,
-        programStageIds,
-        dataElementIds
-      );
-    return teis;
+    return {
+      programId: progrmConfig.id,
+      attributeIds,
+      dataElementIds,
+      programStageIds
+    };
   }
 }

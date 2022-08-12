@@ -1,6 +1,7 @@
+import _ from 'lodash';
 import { BENEFICIARY_STATUS_ID } from '../constants';
 import { Dhis2TrackedEntityInstance } from '../models';
-import { AppUtil } from '../utils';
+import { AppUtil, BeneficiaryDataUtil } from '../utils';
 
 export class BeneficiaryData {
   private _teiData: Dhis2TrackedEntityInstance;
@@ -21,16 +22,21 @@ export class BeneficiaryData {
   }
 
   get beneficiaryStatus(): string {
-    //TODO get status based on availables data
-    return '<status>';
+    return BeneficiaryDataUtil.getCurrentBeneficairyStatus(this._teiData);
   }
 
   toDhis2(): any {
-    //TODO filter  and update new status
     return {
       orgUnit: this._teiData.orgUnit,
       trackedEntityInstance: this._teiData.trackedEntityInstance,
-      attributes: this._teiData.attributes
+      attributes: _.flattenDeep(
+        _.concat(
+          _.filter(this._teiData.attributes, (attributObj) => {
+            attributObj.attribute != BENEFICIARY_STATUS_ID;
+          }),
+          { attribute: BENEFICIARY_STATUS_ID, value: this.beneficiaryStatus }
+        )
+      )
     };
   }
 }
