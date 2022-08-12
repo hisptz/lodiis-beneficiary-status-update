@@ -9,6 +9,6 @@ export interface BeneficiaryStatusConfigModel {
   };
   referralServices: {
     programStages: string[];
-    dataElements: Array<{ id: string; value?: string }>;
+    dataElements: Array<{ id: string; value?: string; stages?: string[] }>;
   };
 }

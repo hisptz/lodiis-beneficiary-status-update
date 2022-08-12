@@ -44,7 +44,8 @@ export const BENEFICIARY_STATUS_PROGRAM: Array<BeneficiaryStatusConfigModel> = [
       programStages: ['MkyTrLeBG8I', 'a7b8GrXEaQy', 'vPTKp7xDX4L'],
       dataElements: [
         {
-          id: 'p7saxV2libq'
+          id: 'p7saxV2libq',
+          stages: ['MkyTrLeBG8I', 'vPTKp7xDX4L']
         }
       ]
     }
@@ -59,7 +60,7 @@ export const BENEFICIARY_STATUS_PROGRAM: Array<BeneficiaryStatusConfigModel> = [
     },
     referralServices: {
       programStages: ['wPk6BYPm3Wo', 'HxUr3gvf5FA'],
-      dataElements: [{ id: 'p7saxV2libq' }]
+      dataElements: [{ id: 'p7saxV2libq', stages: ['wPk6BYPm3Wo'] }]
     }
   },
   {
@@ -72,7 +73,7 @@ export const BENEFICIARY_STATUS_PROGRAM: Array<BeneficiaryStatusConfigModel> = [
     },
     referralServices: {
       programStages: ['pnEgjBdFctR', 's827JhUFGYQ'],
-      dataElements: [{ id: 'p7saxV2libq' }]
+      dataElements: [{ id: 'p7saxV2libq', stages: ['pnEgjBdFctR'] }]
     }
   }
 ];
