@@ -1,17 +1,26 @@
 import _ from 'lodash';
-import { BENEFICIARY_STATUS_ID } from '../constants';
+import { BENEFICIARY_STATUS, BENEFICIARY_STATUS_ID } from '../constants';
 import { Dhis2TrackedEntityInstance } from '../models';
 import { AppUtil, BeneficiaryDataUtil } from '../utils';
 
 export class BeneficiaryData {
   private _teiData: Dhis2TrackedEntityInstance;
+  private _programId: string;
 
-  constructor(tei: Dhis2TrackedEntityInstance) {
+  constructor(tei: Dhis2TrackedEntityInstance, programId: string) {
     this._teiData = tei;
+    this._programId = programId;
   }
 
   get shouldSync(): boolean {
-    return this.previousBeneficiaryStatus != this.beneficiaryStatus;
+    return (
+      [
+        BENEFICIARY_STATUS.active,
+        BENEFICIARY_STATUS.missedServices,
+        BENEFICIARY_STATUS.active
+      ].includes(this.previousBeneficiaryStatus) &&
+      this.previousBeneficiaryStatus != this.beneficiaryStatus
+    );
   }
 
   get previousBeneficiaryStatus(): string {
@@ -22,7 +31,10 @@ export class BeneficiaryData {
   }
 
   get beneficiaryStatus(): string {
-    return BeneficiaryDataUtil.getCurrentBeneficairyStatus(this._teiData);
+    return BeneficiaryDataUtil.getCurrentBeneficairyStatus(
+      this._teiData,
+      this._programId
+    );
   }
 
   toDhis2(): any {

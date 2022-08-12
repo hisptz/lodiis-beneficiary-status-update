@@ -47,7 +47,7 @@ export class Dhis2TrackedEntityInstanceUtil {
     pagefilter: string,
     organisationUniIds: string[] = []
   ): Promise<Dhis2TrackedEntityInstance[]> {
-    const fields = `trackedEntityInstance,orgUnit,attributes[attribute,value],enrollments[enrollmentDate,program,events[event,programStage,eventDate,dataValues[value,dataElement]]]`;
+    const fields = `trackedEntityInstance,orgUnit,attributes[attribute,value],enrollments[enrollmentDate,events[event,programStage,eventDate,dataValues[value,dataElement]]]`;
     const ouFilter =
       organisationUniIds.length > 0
         ? `ou=${organisationUniIds.join(';')}&ouMode=DESCENDANTS`

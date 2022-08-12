@@ -68,7 +68,10 @@ export class AppProcess {
               pagefilter
             );
           for (const tei of teis) {
-            const beneficiry: BeneficiaryData = new BeneficiaryData(tei);
+            const beneficiry: BeneficiaryData = new BeneficiaryData(
+              tei,
+              programId
+            );
             //console.log(beneficiry.toDhis2());
             console.log(beneficiry.previousBeneficiaryStatus);
             console.log(beneficiry.beneficiaryStatus);
