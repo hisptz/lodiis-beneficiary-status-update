@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { at } from 'lodash';
 import { Dhis2TrackedEntityInstance } from '../models';
 import { AppUtil } from './app-util';
 import { HttpUtil } from './http-util';
@@ -10,7 +10,7 @@ export class Dhis2TrackedEntityInstanceUtil {
     'Content-Type': string;
   };
   private _baseUrl: string;
-  private pageSize = 500;
+  private pageSize = 10;
 
   constructor(username: string, password: string, baseUrl: string) {
     this._headers = AppUtil.getHttpAuthorizationHeader(username, password);
@@ -20,7 +20,10 @@ export class Dhis2TrackedEntityInstanceUtil {
 
   async discoverTrackedEntityInstances(
     program: string,
-    organisationUniIds: string[]
+    attributeIds: string[],
+    programStageIds: string[],
+    dataElementIds: string[],
+    organisationUniIds: string[] = []
   ): Promise<Dhis2TrackedEntityInstance[]> {
     const trackedEntityInstances: Dhis2TrackedEntityInstance[] = [];
     const ouFilter =
@@ -31,7 +34,7 @@ export class Dhis2TrackedEntityInstanceUtil {
     const fields = `trackedEntityInstance,orgUnit,attributes[attribute,value],enrollments[program,events[event,progrogramStage,eventDate,dataValues[value,dataElement]]]`;
     await new LogsUtil().addLogs(
       'info',
-      `Discovering pagination details for TEIs`,
+      `Discovering pagination details for TEIs : ${program}`,
       'Dhis2 TEI Util'
     );
     const responsePaginations = await HttpUtil.getHttp(
@@ -47,11 +50,46 @@ export class Dhis2TrackedEntityInstanceUtil {
       count++;
       await new LogsUtil().addLogs(
         'info',
-        `Discovering details for TEIs  :::  ${count}/${pagefilters.length}`,
+        `Discovering details for TEIs : ${program} :::  ${count}/${pagefilters.length}`,
         'Dhis2 TEI Util'
       );
       const url = `${apiUrl}&fields=${fields}&${pagefilter}`;
       const response: any = await HttpUtil.getHttp(this._headers, url);
+      _.map(
+        response.trackedEntityInstances || [],
+        (tei: Dhis2TrackedEntityInstance) => {
+          return {
+            ...tei,
+            attributes: _.filter(tei.attributes || [], (attributObj) =>
+              attributeIds.includes(attributObj.attribute)
+            ),
+            enrollments: _.map(tei.enrollments || [], (enrollment) => {
+              return {
+                ...enrollment,
+                events: _.flattenDeep(
+                  _.map(
+                    _.filter(enrollment.events || [], (eventObj) =>
+                      programStageIds.includes(eventObj.programStage || '')
+                    ),
+                    (eventObj) => {
+                      return {
+                        ...eventObj,
+                        dataValues: _.filter(
+                          eventObj.dataValues || [],
+                          (dataValue) => {
+                            const id = dataValue.dataElement ?? '';
+                            return dataElementIds.includes(id);
+                          }
+                        )
+                      };
+                    }
+                  )
+                )
+              };
+            })
+          };
+        }
+      );
       trackedEntityInstances.push(response.trackedEntityInstances || []);
     }
     return _.flattenDeep(trackedEntityInstances);
