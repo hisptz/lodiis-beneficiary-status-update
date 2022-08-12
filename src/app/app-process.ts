@@ -1,6 +1,13 @@
 import _ from 'lodash';
 import { appConfig } from '../configs';
-import { BENEFICIARY_STATUS_PROGRAM } from '../constants';
+import {
+  BENEFICIARY_STATUS_ID,
+  BENEFICIARY_STATUS_PROGRAM
+} from '../constants';
+import {
+  BeneficiaryStatusConfigModel,
+  Dhis2TrackedEntityInstance
+} from '../models';
 import {
   Dhis2TrackedEntityInstanceUtil,
   Dhis2ProgramUtil,
@@ -29,10 +36,15 @@ export class AppProcess {
   async startProcess() {
     try {
       for (const progrmConfig of BENEFICIARY_STATUS_PROGRAM) {
-        const manadatoryAttributes =
-          await this._dhis2ProgramUtil.discoverProgramMandatoryAttributes(
-            progrmConfig.id
-          );
+        const attributeIds: any = [];
+        await this._dhis2ProgramUtil.discoverProgramMandatoryAttributes(
+          progrmConfig.id
+        );
+        const teis = await this._getBeneficiaryTeiData(
+          attributeIds,
+          progrmConfig
+        );
+        console.log(JSON.stringify(teis));
       }
     } catch (error: any) {
       await new LogsUtil().addLogs(
@@ -41,5 +53,38 @@ export class AppProcess {
         'startProcess'
       );
     }
+  }
+
+  async _getBeneficiaryTeiData(
+    attributeIds: any[],
+    progrmConfig: BeneficiaryStatusConfigModel
+  ): Promise<Dhis2TrackedEntityInstance[]> {
+    attributeIds.push(BENEFICIARY_STATUS_ID);
+    const dataElementIds = _.flattenDeep(
+      _.concat(
+        _.map(
+          progrmConfig?.directServices?.dataElements || [],
+          (dataElement) => dataElement.id ?? []
+        ),
+        _.map(
+          progrmConfig?.directServices?.dataElements || [],
+          (dataElement) => dataElement.id ?? []
+        )
+      )
+    );
+    const programStageIds = _.flattenDeep(
+      _.concat(
+        progrmConfig?.directServices?.programStages,
+        progrmConfig?.referralServices?.programStages
+      )
+    );
+    const teis =
+      await this._dhis2TrackedEntityInstanceUtil.discoverTrackedEntityInstances(
+        progrmConfig.id,
+        attributeIds,
+        programStageIds,
+        dataElementIds
+      );
+    return teis;
   }
 }
