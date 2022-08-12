@@ -7,6 +7,7 @@ export interface Dhis2TrackedEntityInstance {
   }>;
   enrollments?: Array<{
     program: string;
+    enrollmentDate: string;
     events: Array<{
       event: string;
       eventDate: string;

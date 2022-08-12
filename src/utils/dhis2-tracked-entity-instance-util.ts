@@ -25,13 +25,13 @@ export class Dhis2TrackedEntityInstanceUtil {
     dataElementIds: string[],
     organisationUniIds: string[] = []
   ): Promise<Dhis2TrackedEntityInstance[]> {
-    const trackedEntityInstances: Dhis2TrackedEntityInstance[] = [];
+    const trackedEntityInstances: any[] = [];
     const ouFilter =
       organisationUniIds.length > 0
         ? `ou=${organisationUniIds.join(';')}&ouMode=DESCENDANTS`
         : `ouMode=ACCESSIBLE`;
     const apiUrl = `${this._baseUrl}/api/trackedEntityInstances.json?program=${program}&${ouFilter}`;
-    const fields = `trackedEntityInstance,orgUnit,attributes[attribute,value],enrollments[program,events[event,progrogramStage,eventDate,dataValues[value,dataElement]]]`;
+    const fields = `trackedEntityInstance,orgUnit,attributes[attribute,value],enrollments[enrollmentDate,program,events[event,progrogramStage,eventDate,dataValues[value,dataElement]]]`;
     await new LogsUtil().addLogs(
       'info',
       `Discovering pagination details for TEIs : ${program}`,
@@ -46,7 +46,7 @@ export class Dhis2TrackedEntityInstanceUtil {
       this.pageSize
     );
     let count = 0;
-    for (const pagefilter of pagefilters) {
+    for (const pagefilter of _.chunk(pagefilters, 1)[0]) {
       count++;
       await new LogsUtil().addLogs(
         'info',
@@ -55,42 +55,45 @@ export class Dhis2TrackedEntityInstanceUtil {
       );
       const url = `${apiUrl}&fields=${fields}&${pagefilter}`;
       const response: any = await HttpUtil.getHttp(this._headers, url);
-      _.map(
-        response.trackedEntityInstances || [],
-        (tei: Dhis2TrackedEntityInstance) => {
-          return {
-            ...tei,
-            attributes: _.filter(tei.attributes || [], (attributObj) =>
-              attributeIds.includes(attributObj.attribute)
-            ),
-            enrollments: _.map(tei.enrollments || [], (enrollment) => {
-              return {
-                ...enrollment,
-                events: _.flattenDeep(
-                  _.map(
-                    _.filter(enrollment.events || [], (eventObj) =>
-                      programStageIds.includes(eventObj.programStage || '')
-                    ),
-                    (eventObj) => {
-                      return {
-                        ...eventObj,
-                        dataValues: _.filter(
-                          eventObj.dataValues || [],
-                          (dataValue) => {
-                            const id = dataValue.dataElement ?? '';
-                            return dataElementIds.includes(id);
-                          }
-                        )
-                      };
-                    }
-                  )
+     ;
+     let data : any =  _.map(
+      response.trackedEntityInstances || [],
+      (tei: Dhis2TrackedEntityInstance) => {
+        return {
+          ...tei,
+          attributes: _.filter(tei.attributes || [], (attributObj) =>
+            attributeIds.includes(attributObj.attribute)
+          ),
+          enrollments: _.map(tei.enrollments || [], (enrollment) => {
+            return {
+              ...enrollment,
+              enrollmentDate : AppUtil.getFormattedDate(enrollment.enrollmentDate),
+              events: _.flattenDeep(
+                _.map(
+                  _.filter(enrollment.events || [], (eventObj) =>
+                    programStageIds.includes(eventObj.programStage || '')
+                  ),
+                  (eventObj) => {
+                    return {
+                      ...eventObj,
+                      eventDate : AppUtil.getFormattedDate(eventObj.eventDate),
+                      dataValues: _.filter(
+                        eventObj.dataValues || [],
+                        (dataValue) => {
+                          const id = dataValue.dataElement ?? '';
+                          return dataElementIds.includes(id);
+                        }
+                      )
+                    };
+                  }
                 )
-              };
-            })
-          };
-        }
-      );
-      trackedEntityInstances.push(response.trackedEntityInstances || []);
+              )
+            };
+          })
+        };
+      }
+    );
+      trackedEntityInstances.push(data);
     }
     return _.flattenDeep(trackedEntityInstances);
   }
