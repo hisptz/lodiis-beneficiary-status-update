@@ -14,12 +14,13 @@ export class BeneficiaryData {
 
   get shouldSync(): boolean {
     return (
-      [
+      ([
         BENEFICIARY_STATUS.active,
         BENEFICIARY_STATUS.missedServices,
         BENEFICIARY_STATUS.active
       ].includes(this.previousBeneficiaryStatus) &&
-      this.previousBeneficiaryStatus != this.beneficiaryStatus
+        this.previousBeneficiaryStatus !== this.beneficiaryStatus) ||
+      (this.beneficiaryStatus !== '' && this.previousBeneficiaryStatus === '')
     );
   }
 
