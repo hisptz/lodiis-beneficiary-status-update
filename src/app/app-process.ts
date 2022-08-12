@@ -67,15 +67,20 @@ export class AppProcess {
               dataElementIds,
               pagefilter
             );
-          for (const tei of teis) {
-            const beneficiry: BeneficiaryData = new BeneficiaryData(
-              tei,
-              programId
-            );
-            //console.log(beneficiry.toDhis2());
-            console.log(beneficiry.previousBeneficiaryStatus);
-            console.log(beneficiry.beneficiaryStatus);
-            console.log(beneficiry.shouldSync);
+          const beneficiraries = _.filter(
+            _.flattenDeep(
+              _.map(teis, (tei) => {
+                return new BeneficiaryData(tei, programId);
+              })
+            ),
+            (beneficirary) => beneficirary.shouldSync
+          );
+          if (beneficiraries.length > 0) {
+            const response =
+              await this._dhis2TrackedEntityInstanceUtil.syncTrackedEntityInstanceToServer(
+                _.map(beneficiraries, (beneficirary) => beneficirary.toDhis2())
+              );
+            console.log(response);
           }
         }
       }

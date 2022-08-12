@@ -10,13 +10,35 @@ export class Dhis2TrackedEntityInstanceUtil {
     'Content-Type': string;
   };
   private _baseUrl: string;
-  private pageSize = 10;
+  private pageSize = 100;
 
   constructor(username: string, password: string, baseUrl: string) {
     this._headers = AppUtil.getHttpAuthorizationHeader(username, password);
     this._baseUrl = baseUrl;
   }
-  ///TODO const url = `${serverUrl}/api/trackedEntityInstances?strategy=CREATE_AND_UPDATE`;
+
+  async syncTrackedEntityInstanceToServer(trackedEntityInstances: any) {
+    const response = { imported: 0, ignored: 0 };
+    try {
+      const url = `${this._baseUrl}/api/trackedEntityInstances?strategy=CREATE_AND_UPDATE`;
+      const responseData: any = await HttpUtil.postHttp(this._headers, url, {
+        trackedEntityInstances
+      });
+      const importSummary = responseData.response || {};
+      const imported = importSummary.imported ?? 0;
+      const updated = importSummary.updated ?? 0;
+      const ignored = importSummary.ignored ?? 0;
+      response.imported = imported + updated;
+      response.ignored = ignored;
+    } catch (error: any) {
+      await new LogsUtil().addLogs(
+        'error',
+        error.message || error,
+        'syncTrackedEntityInstanceToServer'
+      );
+    }
+    return response;
+  }
 
   async discoverTrackedEntityInstancesPageFilters(
     program: string,
