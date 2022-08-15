@@ -76,11 +76,20 @@ export class AppProcess {
             (beneficirary) => beneficirary.shouldSync
           );
           if (beneficiraries.length > 0) {
+            await new LogsUtil().addLogs(
+              'info',
+              `Uploading TEIs : ${beneficiraries.length} ::: ${count}/${pagefilters.length} `,
+              'startProcess'
+            );
             const response =
               await this._dhis2TrackedEntityInstanceUtil.syncTrackedEntityInstanceToServer(
                 _.map(beneficiraries, (beneficirary) => beneficirary.toDhis2())
               );
-            console.log(response);
+            await new LogsUtil().addLogs(
+              'info',
+              `Import summary: ${JSON.stringify(response)} `,
+              'startProcess'
+            );
           }
         }
       }
