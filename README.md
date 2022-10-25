@@ -9,10 +9,10 @@ KB beneficiary status update's script is node script with typescript support, ai
 Below are pre-requiested for the script to be able to clone and run the script successfully. Typescript mostly for building source code into **_js bundled_** codes for running the script.
 
 ```
-- Node 12+
-- npm 6+
-- typescript 4+
-- git
+- GIT
+- Node v12+
+- npm v6+
+- typescript v4+
 ```
 
 ## Get started with script
@@ -34,10 +34,30 @@ kb-beneficiary-status-update
 |-- resources
 |-- src
     |-- app
+        |--app-process.ts
+        |- beneficiary-data.ts
+        |--index.ts
     |-- configs
+        |-- app-config.example.ts
+        |-- index.ts
     |-- contants
+        |-- beneficiary-status-constants.ts
+        |-- index.ts
     |-- models
+        |-- app-config-model.ts
+        |-- beneficiary-status-config-model.ts
+        |-- dhis2-tracked-entity-instance.ts
+        |-- index.ts
     |-- utils
+        |-- app-utils.ts
+        |-- beneficiary-data-util.ts
+        |-- dhis2-program-util.ts
+        |-- dhis2-tracked-entity-instance.ts
+        |-- excel-utils.ts
+        |-- file-utils.ts
+        |-- http-utils.ts
+        |-- index.ts
+        |-- logs-utils.ts
     |--index.ts
 |-- .gitigonre
 |-- .prittierrc
@@ -53,7 +73,7 @@ kb-beneficiary-status-update
 
 Prior run the script need configurations of the script by set up acess credential to DHIS2 instance where the script will proxy to update beneficiaries.
 
-To set up access creadntial create the file **\_app-config.ts** on **_`src/configs`_** with below contents
+To set up access creadntial create the file **app-config.ts** on **_`src/configs`_** with below contents
 
 ```
 import { AppConfigModel } from '../models';
