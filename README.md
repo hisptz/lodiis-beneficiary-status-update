@@ -49,15 +49,15 @@ kb-beneficiary-status-update
 |   |   |-- dhis2-tracked-entity-instance.ts
 |   |   |-- index.ts
 |   |-- utils
-|   |   |-- app-utils.ts
+|   |   |-- app-util.ts
 |   |   |-- beneficiary-data-util.ts
 |   |   |-- dhis2-program-util.ts
 |   |   |-- dhis2-tracked-entity-instance.ts
-|   |   |-- excel-utils.ts
-|   |   |-- file-utils.ts
-|   |   |-- http-utils.ts
+|   |   |-- excel-util.ts
+|   |   |-- file-util.ts
+|   |   |-- http-util.ts
 |   |   |-- index.ts
-|   |   |-- logs-utils.ts
+|   |   |-- logs-util.ts
 |   |--index.ts
 |-- .gitigonre
 |-- .prittierrc
