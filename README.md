@@ -33,32 +33,32 @@ kb-beneficiary-status-update
 |-- node_modules
 |-- resources
 |-- src
-    |-- app
-        |--app-process.ts
-        |- beneficiary-data.ts
-        |--index.ts
-    |-- configs
-        |-- app-config.example.ts
-        |-- index.ts
-    |-- contants
-        |-- beneficiary-status-constants.ts
-        |-- index.ts
-    |-- models
-        |-- app-config-model.ts
-        |-- beneficiary-status-config-model.ts
-        |-- dhis2-tracked-entity-instance.ts
-        |-- index.ts
-    |-- utils
-        |-- app-utils.ts
-        |-- beneficiary-data-util.ts
-        |-- dhis2-program-util.ts
-        |-- dhis2-tracked-entity-instance.ts
-        |-- excel-utils.ts
-        |-- file-utils.ts
-        |-- http-utils.ts
-        |-- index.ts
-        |-- logs-utils.ts
-    |--index.ts
+|   |-- app
+|   |   |--app-process.ts
+|   |   |- beneficiary-data.ts
+|   |   |--index.ts
+|   |-- configs
+|   |   |-- app-config.example.ts
+|   |   |-- index.ts
+|   |-- constants
+|   |   |-- beneficiary-status-constants.ts
+|   |   |-- index.ts
+|   |-- models
+|   |   |-- app-config-model.ts
+|   |   |-- beneficiary-status-config-model.ts
+|   |   |-- dhis2-tracked-entity-instance.ts
+|   |   |-- index.ts
+|   |-- utils
+|   |   |-- app-utils.ts
+|   |   |-- beneficiary-data-util.ts
+|   |   |-- dhis2-program-util.ts
+|   |   |-- dhis2-tracked-entity-instance.ts
+|   |   |-- excel-utils.ts
+|   |   |-- file-utils.ts
+|   |   |-- http-utils.ts
+|   |   |-- index.ts
+|   |   |-- logs-utils.ts
+|   |--index.ts
 |-- .gitigonre
 |-- .prittierrc
 |-- LICENSE
@@ -68,6 +68,18 @@ kb-beneficiary-status-update
 |-- run-script.sh
 |-- tsconfig.json
 ```
+
+Based on above source code structure, folder or sub folder below is descriptions and contents under each
+
+- **dist**: This is auto-generate folder contained compiled js bundled file from all ts files in `src` directory
+- **node_modules**: This is autogenrate folder for all installed packages for supporting script to run. It generated on installation of all dependences of the scripts
+- **resources**: This is autogenrate by the script, it contains generated logs files for the scripts as it run though put the process of updating beneficiary's status.
+- **src**: This main srouce code directory, and the `index.ts` is the main entry file for the script. It contains below sub directories below:-
+  - **app**: Contains all main process of the app including app process as well as manipulation process for beneficiary data.
+  - **configs**: This is for configurations of the script including access to dhis2 instance where script will be using for updating beneficiary status.
+  - **constants**: Contains all constants/references for beneficiary status updates including program metadata references used, status and duration limit for changes of beneficiary status.
+  - **models**: Contains models/interfaces of script metadata including _app configs_, _dhis2 tracked entity instance_ and _beneficiary status configuration_.
+  - **utils**: Contains utils functions or classes necessary for running the all process during deduction and updation for beneficairy status. It includes _app utils_, _beneficiary data utils_, _dhis2 program and tracked entity instance utils_, _excel utils_, _file utils_, _http utils_ as well as _logs utils_
 
 ### Setup & Configurations
 
@@ -86,4 +98,30 @@ export const appConfig: AppConfigModel = {
 
 ```
 
+After installation run below command to install neccessary packages for the script
+
+```
+npm install
+```
+
 ## Operation of script
+
+After set up the script and install all script's dependences you can run the app for development purpose or deployments.
+
+For development, inorder to tracking changes as changing source codes, you can run below command while inside the script dicectory
+
+```
+npm run dev
+```
+
+For deployment, you can run below command while inside the script dicectory
+
+```
+sh run-script.sh
+```
+
+To view script logs as the script is run or in progress, you can run below command while inside the script dicectory
+
+```
+tail -f resources/logs/logs.txt
+```
