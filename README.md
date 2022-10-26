@@ -33,32 +33,32 @@ kb-beneficiary-status-update
 |-- node_modules
 |-- resources
 |-- src
-    |-- app
-        |--app-process.ts
-        |- beneficiary-data.ts
-        |--index.ts
-    |-- configs
-        |-- app-config.example.ts
-        |-- index.ts
-    |-- contants
-        |-- beneficiary-status-constants.ts
-        |-- index.ts
-    |-- models
-        |-- app-config-model.ts
-        |-- beneficiary-status-config-model.ts
-        |-- dhis2-tracked-entity-instance.ts
-        |-- index.ts
-    |-- utils
-        |-- app-utils.ts
-        |-- beneficiary-data-util.ts
-        |-- dhis2-program-util.ts
-        |-- dhis2-tracked-entity-instance.ts
-        |-- excel-utils.ts
-        |-- file-utils.ts
-        |-- http-utils.ts
-        |-- index.ts
-        |-- logs-utils.ts
-    |--index.ts
+|   |-- app
+|   |   |--app-process.ts
+|   |   |- beneficiary-data.ts
+|   |   |--index.ts
+|   |-- configs
+|   |   |-- app-config.example.ts
+|   |   |-- index.ts
+|   |-- constants
+|   |   |-- beneficiary-status-constants.ts
+|   |   |-- index.ts
+|   |-- models
+|   |   |-- app-config-model.ts
+|   |   |-- beneficiary-status-config-model.ts
+|   |   |-- dhis2-tracked-entity-instance.ts
+|   |   |-- index.ts
+|   |-- utils
+|   |   |-- app-utils.ts
+|   |   |-- beneficiary-data-util.ts
+|   |   |-- dhis2-program-util.ts
+|   |   |-- dhis2-tracked-entity-instance.ts
+|   |   |-- excel-utils.ts
+|   |   |-- file-utils.ts
+|   |   |-- http-utils.ts
+|   |   |-- index.ts
+|   |   |-- logs-utils.ts
+|   |--index.ts
 |-- .gitigonre
 |-- .prittierrc
 |-- LICENSE
