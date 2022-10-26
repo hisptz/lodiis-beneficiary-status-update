@@ -106,7 +106,7 @@ npm install
 
 ## Operation of script
 
-After set up the script and install all script's dependences you can run the app for development purpose or deployments.
+After set up the script and install all script's dependences, you can run the app for development purpose or deployments.
 
 For development, inorder to tracking changes as changing source codes, you can run below command while inside the script dicectory
 
