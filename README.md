@@ -105,3 +105,23 @@ npm install
 ```
 
 ## Operation of script
+
+After set up the script and install all script's dependences you can run the app for development purpose or deployments.
+
+For development, inorder to tracking changes as changing source codes, you can run below command while inside the script dicectory
+
+```
+npm run dev
+```
+
+For deployment, you can run below command while inside the script dicectory
+
+```
+sh run-script.sh
+```
+
+To view script logs as the script is run or in progress, you can run below command while inside the script dicectory
+
+```
+tail -f resources/logs/logs.txt
+```
