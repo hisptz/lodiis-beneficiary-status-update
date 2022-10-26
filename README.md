@@ -86,4 +86,10 @@ export const appConfig: AppConfigModel = {
 
 ```
 
+After installation run below command to install neccessary packages for the script
+
+```
+npm install
+```
+
 ## Operation of script
