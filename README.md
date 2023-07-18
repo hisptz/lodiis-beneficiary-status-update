@@ -1,8 +1,8 @@
-# KB Beneficiary Status Update
+# LODIIS Beneficiary Status Update
 
 ## Introduction
 
-KB beneficiary status update's script is node script with typescript support, aim for update beneficairies status of **dreams/agyw** or **OVC intervantion** based on service provisons for a specificia period of time. Theses status including **active**, **in-active** and **missed services**.
+LODIIS beneficiary status update's script is node script with typescript support, aim for update beneficairies status of **dreams/agyw** or **OVC intervantion** based on service provisons for a specificia period of time. Theses status including **active**, **in-active** and **missed services**.
 
 ## Pre-requiestes for the script
 
@@ -17,18 +17,18 @@ Below are pre-requiested for the script to be able to clone and run the script s
 
 ## Get started with script
 
-To get start up we need to clone or [download](https://github.com/hisptz/kb-beneficiary-status-update/archive/refs/heads/develop.zip) the source codes and having better under stand of source codes for set up prior development or run the script.
+To get start up we need to clone or [download](https://github.com/hisptz/lodiis-beneficiary-status-update/archive/refs/heads/develop.zip) the source codes and having better under stand of source codes for set up prior development or run the script.
 
 To clone the app, make sure you have installed the **GIT** command line and tun below command on the terminal
 
-`git clone https://github.com/hisptz/kb-beneficiary-status-update.git`
+`git clone https://github.com/hisptz/lodiis-beneficiary-status-update.git`
 
 ### Source code structure for script
 
 Once codes strcture of downloaded or cloned script has below structure
 
 ```
-kb-beneficiary-status-update
+lodiis-beneficiary-status-update
 |-- dist
 |-- node_modules
 |-- resources
